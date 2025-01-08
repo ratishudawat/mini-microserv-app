@@ -1,10 +1,15 @@
 import { FormEventHandler, useRef } from 'react';
-import CommentList from './CommentList';
 import axios from 'axios';
+
+type Comment = {
+  id: number;
+  content: string;
+};
 
 type Post = {
   id: number;
   title: string;
+  comments: Comment[];
 };
 
 type PostProps = {
@@ -12,6 +17,7 @@ type PostProps = {
 };
 
 const Post = ({ post }: PostProps) => {
+  console.log(post);
   const commentInputRef = useRef<HTMLInputElement | null>(null);
 
   const submitComment: FormEventHandler = (e) => {
@@ -41,7 +47,15 @@ const Post = ({ post }: PostProps) => {
   return (
     <li key={post.id}>
       <span>{post.title}</span>
-      <CommentList postId={post.id} />
+      <div>
+        <p>Comments:</p>
+        <ol>
+          {post.comments.map((comment) => {
+            return <li key={comment.id}>{comment.content}</li>;
+          })}
+        </ol>
+      </div>
+
       <form onSubmit={submitComment}>
         <input ref={commentInputRef} type='text' />
         <button>Submit</button>

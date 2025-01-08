@@ -14,9 +14,14 @@ app.post('/events', (req: Request, res: Response) => {
   try {
     axios.post('http://localhost:3000/events', req.body);
     axios.post('http://localhost:3001/events', req.body);
+    axios.post('http://localhost:4002/events', req.body);
   } catch (e) {
     console.log(e);
   }
+  res.json({
+    message: 'success',
+  });
+  return;
 });
 
 export default app;

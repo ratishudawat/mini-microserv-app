@@ -4,6 +4,6 @@ export interface Post {
 }
 
 export type Event = {
-  type: string;
+  type: 'POST_CREATED' | 'COMMENT_CREATED';
   payload: any;
 };

@@ -12,9 +12,15 @@ const PostList = (): JSX.Element => {
   const [posts, setPosts] = useState<PostType[] | []>([]);
 
   const getPosts = useCallback(async () => {
-    const { data } = await axios.get('http://localhost:4002/posts');
-    console.log(data.posts);
-    setPosts(data.posts);
+    try {
+      console.log('here');
+
+      const { data } = await axios.get('http://localhost:4002/posts');
+      console.log(data.posts);
+      setPosts(data.posts);
+    } catch (error) {
+      console.error(error);
+    }
   }, []);
 
   useEffect(() => {

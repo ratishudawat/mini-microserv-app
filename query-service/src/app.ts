@@ -10,6 +10,37 @@ app.use(express.json());
 
 const posts: Post[] = [];
 
+export function processEvent(event: Event) {
+  switch (event.type) {
+    case 'POST_CREATED':
+      posts.push({
+        ...event.payload,
+        comments: [],
+      });
+      break;
+    case 'COMMENT_CREATED':
+      const { content, postId, id } = event.payload;
+      const post = posts.find((p) => {
+        return postId === p.id;
+      });
+      if (!post) {
+        return {
+          status: 'error',
+          message: 'Post doest exist',
+        };
+      } else {
+        post.comments.push({ content, id });
+      }
+      break;
+    default:
+      console.log('Unhandled event', event.type);
+  }
+  return {
+    message: 'success',
+    data: posts,
+  };
+}
+
 //routes
 app.get('/posts', (req: Request, res: Response) => {
   res.json({
@@ -21,37 +52,8 @@ app.get('/posts', (req: Request, res: Response) => {
 app.post('/events', (req: Request, res: Response) => {
   const eventData: Event = req.body;
   console.log(eventData);
-
-  switch (eventData.type) {
-    case 'POST_CREATED':
-      posts.push({
-        ...eventData.payload,
-        comments: [],
-      });
-      break;
-    case 'COMMENT_CREATED':
-      const { content, postId, id } = eventData.payload;
-      const post = posts.find((p) => {
-        return postId === p.id;
-      });
-      if (!post) {
-        res.json({
-          status: 'error',
-          message: 'Post doest exist',
-        });
-        return;
-      } else {
-        post.comments.push({ content, id });
-      }
-      break;
-    default:
-      console.log('Unhandled event', eventData.type);
-  }
-
-  res.json({
-    message: 'success',
-    data: posts,
-  });
+  const result = processEvent(eventData);
+  res.json(result);
 });
 
 export default app;

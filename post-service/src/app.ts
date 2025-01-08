@@ -1,6 +1,7 @@
 import express, { Request, Response, Application } from 'express';
 import cors from 'cors';
 import { getPosts, addPost } from './controllers/posts.controller';
+import { processEvent } from './controllers/events.controller';
 
 const app: Application = express();
 
@@ -11,6 +12,9 @@ app.use(cors());
 // Routes
 app.get('/posts', getPosts);
 app.post('/posts', addPost);
+
+app.post('/events', processEvent);
+
 app.use('/', (req: Request, res: Response) => {
   res.status(404).json({
     status: 404,

@@ -1,6 +1,6 @@
 import express, { Application, Request, Response } from 'express';
 import cors from 'cors';
-import { Post, Event } from './types';
+import { Post, AllEvents } from './types';
 
 const app: Application = express();
 
@@ -10,7 +10,7 @@ app.use(express.json());
 
 const posts: Post[] = [];
 
-export function processEvent(event: Event) {
+export function processEvent(event: AllEvents) {
   switch (event.type) {
     case 'POST_CREATED':
       posts.push({
@@ -19,9 +19,9 @@ export function processEvent(event: Event) {
       });
       break;
     case 'COMMENT_CREATED':
-      const { content, postId, id } = event.payload;
+      const commentData = event.payload;
       const post = posts.find((p) => {
-        return postId === p.id;
+        return commentData.postId === p.id;
       });
       if (!post) {
         return {
@@ -29,7 +29,17 @@ export function processEvent(event: Event) {
           message: 'Post doest exist',
         };
       } else {
-        post.comments.push({ content, id });
+        post.comments.push(commentData);
+      }
+    case 'COMMENT_UPDATED':
+      const { postId, id, content, status } = event.payload;
+      const targetPost = posts.find((p) => p.id === postId);
+      if (targetPost) {
+        const targetComment = targetPost.comments.find((comment) => comment.id === id);
+        if (targetComment) {
+          targetComment.content = content;
+          targetComment.status = status;
+        }
       }
       break;
     default:
@@ -50,7 +60,7 @@ app.get('/posts', (req: Request, res: Response) => {
 });
 
 app.post('/events', (req: Request, res: Response) => {
-  const eventData: Event = req.body;
+  const eventData: AllEvents = req.body;
   console.log(eventData);
   const result = processEvent(eventData);
   res.json(result);

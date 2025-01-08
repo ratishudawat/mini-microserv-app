@@ -1,11 +1,6 @@
 import { Request, Response } from 'express';
 import axios from 'axios';
-
-type Comment = {
-  id: number;
-  postId: number;
-  content: string;
-};
+import { Comment } from '../types';
 
 const comments: Comment[] = [];
 
@@ -29,6 +24,7 @@ export async function postComments(req: Request, res: Response) {
     id: comments.length,
     postId: parseInt(postId),
     content,
+    status: 'Pending',
   };
 
   comments.push(newComment);

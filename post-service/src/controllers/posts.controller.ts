@@ -21,6 +21,7 @@ export async function addPost(req: Request, res: Response) {
   const newPost: Post = {
     id: posts.length,
     title,
+    comments: [],
   };
 
   posts.push(newPost);

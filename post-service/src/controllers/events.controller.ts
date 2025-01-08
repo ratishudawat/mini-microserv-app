@@ -1,9 +1,8 @@
 import { Request, Response } from 'express';
-import { Event } from '../types';
+import { AllEvents } from '../types';
 
 export const processEvent = (req: Request, res: Response) => {
-  const body: Event = req.body;
-  console.log('In posts', body);
+  const body: AllEvents = req.body;
   res.json({
     message: 'success',
   });

@@ -1,15 +1,11 @@
 import express, { Request, Response } from 'express';
 import cors from 'cors';
 import axios from 'axios';
+import { AllEvents } from './types';
 
 const app = express();
 
-type Event = {
-  type: 'POST_CREATED' | 'COMMENT_CREATED';
-  payload: any;
-};
-
-const events: Event[] = [];
+const events: AllEvents[] = [];
 
 // middlewares
 app.use(express.json());
@@ -22,13 +18,13 @@ app.get('/events', (req: Request, res: Response) => {
 });
 
 app.post('/events', (req: Request, res: Response) => {
-  console.log(req.body);
   events.push(req.body);
 
   try {
     axios.post('http://localhost:3000/events', req.body).catch((e) => console.error('Post Service unavailable'));
     axios.post('http://localhost:3001/events', req.body).catch((e) => console.error('Comments Service unavailable'));
     axios.post('http://localhost:4002/events', req.body).catch((e) => console.error('Query Service unavailable'));
+    axios.post('http://localhost:4003/events', req.body).catch((e) => console.error('Moderation Service unavailable'));
   } catch (e) {
     console.log(e);
   }

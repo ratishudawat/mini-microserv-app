@@ -1,19 +1,9 @@
 import { FormEventHandler, useRef } from 'react';
 import axios from 'axios';
-
-type Comment = {
-  id: number;
-  content: string;
-};
-
-type Post = {
-  id: number;
-  title: string;
-  comments: Comment[];
-};
+import { Post as PostType } from '../types';
 
 type PostProps = {
-  post: Post;
+  post: PostType;
 };
 
 const Post = ({ post }: PostProps) => {
@@ -51,7 +41,8 @@ const Post = ({ post }: PostProps) => {
         <p>Comments:</p>
         <ol>
           {post.comments.map((comment) => {
-            return <li key={comment.id}>{comment.content}</li>;
+            if (comment.status == 'Pending') return <li key={comment.id}>This comment is under moderation</li>;
+            else return <li key={comment.id}>{comment.content}</li>;
           })}
         </ol>
       </div>

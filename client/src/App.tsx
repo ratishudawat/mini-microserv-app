@@ -1,4 +1,3 @@
-// import { Comments } from './components/Comments';
 import CreatePost from './components/CreatePost';
 import PostList from './components/PostList';
 

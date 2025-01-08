@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import axios from 'axios';
 import Post from './Post';
 
@@ -10,17 +10,17 @@ type PostType = {
 const PostList = (): JSX.Element => {
   const [posts, setPosts] = useState<PostType[] | []>([]);
 
-  const getPosts = async () => {
+  const getPosts = useCallback(async () => {
     const { data } = await axios.get('http://localhost:3000/posts');
     setPosts(data);
-  };
+  }, []);
 
   useEffect(() => {
     if (posts.length > 0) {
       return;
     }
     getPosts();
-  }, [posts]);
+  }, []);
 
   return (
     <ul>
@@ -32,15 +32,3 @@ const PostList = (): JSX.Element => {
 };
 
 export default PostList;
-// APP
-//  CreatePost
-//    Label
-//      Input
-//      Button
-//  PostsList
-//    Posts
-//      Label
-//      {Post Text}
-//      CommentList
-//        Comment
-//      Input

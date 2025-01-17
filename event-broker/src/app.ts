@@ -17,14 +17,16 @@ app.get('/events', (req: Request, res: Response) => {
   return;
 });
 
-app.post('/events', (req: Request, res: Response) => {
+app.post('/events', async (req: Request, res: Response) => {
   events.push(req.body);
 
   try {
-    axios.post('http://localhost:3000/events', req.body).catch((e) => console.error('Post Service unavailable'));
-    axios.post('http://localhost:3001/events', req.body).catch((e) => console.error('Comments Service unavailable'));
-    axios.post('http://localhost:4002/events', req.body).catch((e) => console.error('Query Service unavailable'));
-    axios.post('http://localhost:4003/events', req.body).catch((e) => console.error('Moderation Service unavailable'));
+    axios.post('http://posts-srv:3000/events', req.body).catch((e) => console.error('Post Service unavailable'));
+    axios.post('http://comments-rv:3001/events', req.body).catch((e) => console.error('Comments Service unavailable'));
+    axios.post('http://query-srv:4002/events', req.body).catch((e) => console.error('Query Service unavailable'));
+    axios
+      .post('http://moderation-srv:4003/events', req.body)
+      .catch((e) => console.error('Moderation Service unavailable'));
   } catch (e) {
     console.log(e);
   }

@@ -12,7 +12,7 @@ server.listen(PORT, async () => {
   console.log(`Query service runnning on port ${PORT}`);
   console.log('Fetching events..');
 
-  const { data: events }: { data: AllEvents[] } = await axios.get('http://localhost:4000/events');
+  const { data: events }: { data: AllEvents[] } = await axios.get('http://event-broker-srv:4000/events');
 
   events.forEach((event: AllEvents) => {
     processEvent(event);

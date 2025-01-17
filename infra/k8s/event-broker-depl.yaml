@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: event-broker-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: event-broker
+  template:
+    metadata:
+      labels:
+        app: event-broker
+    spec:
+      containers:
+        - name: event-broker
+          image: ratishudawat/event-broker
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: event-broker-srv
+spec:
+  selector:
+    app: event-broker
+  ports:
+    - protocol: TCP
+      port: 4000
+      targetPort: 4000

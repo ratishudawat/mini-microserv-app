@@ -26,8 +26,8 @@ export async function addPost(req: Request, res: Response) {
 
   posts.push(newPost);
 
-  axios
-    .post('http://localhost:4000/events', {
+  await axios
+    .post('http://event-broker-srv:4000/events', {
       type: 'POST_CREATED',
       payload: newPost,
     })

@@ -12,7 +12,7 @@ export const processEvent = async (req: Request, res: Response) => {
     };
 
     await axios
-      .post('http://localhost:4000/events', event)
+      .post('http://event-broker-srv:4000/events', event)
       .catch((e) => console.log('Error occurred in comments service'));
   }
 

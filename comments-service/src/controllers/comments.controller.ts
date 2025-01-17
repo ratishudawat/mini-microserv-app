@@ -30,7 +30,7 @@ export async function postComments(req: Request, res: Response) {
   comments.push(newComment);
 
   axios
-    .post('http://localhost:4000/events', {
+    .post('http://event-broker-srv:4000/events', {
       type: 'COMMENT_CREATED',
       payload: newComment,
     })

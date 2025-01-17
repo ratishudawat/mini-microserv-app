@@ -24,7 +24,7 @@ app.post('/events', async (req: Request, res: Response) => {
       payload.status = 'Approved';
     }
     await axios
-      .post('http://localhost:4000/events', {
+      .post('http://event-broker-srv:4000/events', {
         type: 'COMMENT_MODERATED',
         payload,
       })
